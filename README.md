@@ -1,3 +1,9 @@
-# Does Qualifying Really Matter? The Causal Impact of Making It to Q2 and Q3 on Formula 1 Race Outcomes
+# Does Qualifying Really Matter?
+## The Causal Impact of Advancing to Q2 and Q3 on Formula 1 Race Outcomes
+This project uses a Regression Discontinuity Design (RDD) to analyze the causal effects of advancing to Q2 and Q3 during Formula 1 qualifying sessions on various race outcomes. The data for this analysis was obtained using the Python library FastF1.
 
-Regression Discontinuity Design (RDD) to analyse the effect of making it to Q2 and Q3 on race outcomes with F1 data obtained with the python library FastF1 
+
+
+
+
+
