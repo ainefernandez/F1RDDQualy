@@ -1,98 +1,43 @@
-library(dplyr)
-library(tidyverse)
-library(stargazer)
-library(rdrobust)
-library(rdd)
-library(lfe)
-data<-read.csv("PaperFullDataFinal.csv")
-dataWithPitlane<-read.csv("dataWithPitlane.csv")
-data$Team <- as.factor(data$Team)
-data$GP <- as.factor(data$GP)
-dataWithPitlane$Team <- as.factor(dataWithPitlane$Team)
-dataWithPitlane$GP <- as.factor(dataWithPitlane$GP)
+# 2. Robustness Analysis
+# This R script performs the robustness analysis for the RDD project.
+# First, it tests different bandwidths, and then it evaluates different cutoffs for each outcome.
+# The analysis is conducted separately for Q1 and Q2.
 
-
-cutoff <- 0 
-
-data_filtered <- data[data$GapToKnockoutQ1 >= (cutoff - bandwidth) & 
-                        data$GapToKnockoutQ1 <= (cutoff + bandwidth), ]
-model1 <- felm(GridPosition ~ MadeItToQ2 + GapToKnockoutQ1 + 
-                 GapToKnockoutQ1:MadeItToQ2  | Team:GP, data = data_filtered)
-summary(model1)
-
-cutoff <- 0 
-bandwidth<-.1
-data_filtered <- data[data$GapToKnockoutQ1 >= (cutoff - bandwidth) & 
-                        data$GapToKnockoutQ1 <= (cutoff + bandwidth), ]
-model1 <- felm(GridPosition ~ MadeItToQ2 + GapToKnockoutQ1 + 
-                 GapToKnockoutQ1:MadeItToQ2  | Team:GP, data = data_filtered)
-summary(model1)
-
-
-cutoff <- 0 
-bandwidth<-.2
-data_filtered <- data[data$GapToKnockoutQ1 >= (cutoff - bandwidth) & 
-                        data$GapToKnockoutQ1 <= (cutoff + bandwidth), ]
-model1 <- felm(GridPosition ~ MadeItToQ2 + GapToKnockoutQ1 + 
-                 GapToKnockoutQ1:MadeItToQ2  | Team:GP, data = data_filtered)
-summary(model1)
-
-cutoff <- 0 
-bandwidth<-.3
-data_filtered <- data[data$GapToKnockoutQ1 >= (cutoff - bandwidth) & 
-                        data$GapToKnockoutQ1 <= (cutoff + bandwidth), ]
-model1 <- felm(GridPosition ~ MadeItToQ2 + GapToKnockoutQ1 + 
-                 GapToKnockoutQ1:MadeItToQ2  | Team:GP, data = data_filtered)
-summary(model1)
-
-cutoff <- 0 
-bandwidth<-.4
-data_filtered <- data[data$GapToKnockoutQ1 >= (cutoff - bandwidth) & 
-                        data$GapToKnockoutQ1 <= (cutoff + bandwidth), ]
-model1 <- felm(GridPosition ~ MadeItToQ2 + GapToKnockoutQ1 + 
-                 GapToKnockoutQ1:MadeItToQ2  | Team:GP, data = data_filtered)
-summary(model1)
-
-
-cutoff <- 0 
-bandwidth<-.5
-data_filtered <- data[data$GapToKnockoutQ1 >= (cutoff - bandwidth) & 
-                        data$GapToKnockoutQ1 <= (cutoff + bandwidth), ]
-model1 <- felm(GridPosition ~ MadeItToQ2 + GapToKnockoutQ1 + 
-                 GapToKnockoutQ1:MadeItToQ2  | Team:GP, data = data_filtered)
-summary(model1)
-
-
-#BANWIDTHS
 
 library(lfe)
 library(dplyr)
 library(ggplot2)
 
-# Función para modelar y graficar intervalos de confianza para MadeItToQ2
+
+data<-read.csv("FinalDataSet.csv")
+data$Team <- as.factor(data$Team)
+data$GP <- as.factor(data$GP)
+
+#BANWIDTHS
+
 run_models_and_plotQ1 <- function(data, outcome, cutoff = 0, bandwidth_values = seq(0.05, 1.05, by = 0.1)) {
-  results <- data.frame()  # Crear un dataframe para almacenar los resultados
+  results <- data.frame()  # Create a dataframe to store the results
   
   for (bw in bandwidth_values) {
-    # Filtrar los datos según el ancho de banda actual
+    # Filter the data based on the current bandwidth
     data_filtered <- data[data$GapToKnockoutQ1 >= (cutoff - bw) & data$GapToKnockoutQ1 <= (cutoff + bw), ]
     
-    # Crear la fórmula dinámica para el modelo
+    # Create the dynamic formula for the model
     formula <- as.formula(paste(outcome, "~ MadeItToQ2 + GapToKnockoutQ1 + GapToKnockoutQ1:MadeItToQ2 | Team:GP"))
     
-    # Ajustar el modelo
+    # Fit the model
     model <- felm(formula, data = data_filtered)
     
-    # Extraer coeficientes y errores estándar para MadeItToQ2 solo
+    # Extract coefficients and standard errors for MadeItToQ2 only
     if ("MadeItToQ2" %in% rownames(summary(model)$coefficients)) {
       estimate <- summary(model)$coefficients["MadeItToQ2", "Estimate"]
       std_error <- summary(model)$coefficients["MadeItToQ2", "Std. Error"]
       
-      # Calcular intervalos de confianza
+      # Compute confidence intervals
       ci_lower <- estimate - 1.96 * std_error
       ci_upper <- estimate + 1.96 * std_error
       
-      # Agregar resultados al dataframe
+      # Add results to the dataframe
       results <- rbind(results, data.frame(
         Outcome = outcome,
         Bandwidth = bw,
@@ -103,7 +48,7 @@ run_models_and_plotQ1 <- function(data, outcome, cutoff = 0, bandwidth_values = 
     }
   }
   
-  # Crear el gráfico de intervalos de confianza para las estimaciones de MadeItToQ2
+  # Create the confidence interval plot for the MadeItToQ2 estimates
   ggplot(results, aes(x = Bandwidth, y = Estimate)) +
     geom_point(color = "red") +
     geom_hline(yintercept = 0, color = "black") +
@@ -114,30 +59,30 @@ run_models_and_plotQ1 <- function(data, outcome, cutoff = 0, bandwidth_values = 
     theme_bw()
 }
 
-# Función para modelar y graficar intervalos de confianza para MadeItToQ3
+# Function to model and plot confidence intervals for MadeItToQ3
 run_models_and_plotQ2 <- function(data, outcome, cutoff = 0, bandwidth_values = seq(0.05, 1.05, by = 0.1)) {
-  results <- data.frame()  # Crear un dataframe para almacenar los resultados
+  results <- data.frame()  # Create a dataframe to store the results
   
   for (bw in bandwidth_values) {
-    # Filtrar los datos según el ancho de banda actual
+    # Filter the data based on the current bandwidth
     data_filtered <- data[data$GapToKnockoutQ2 >= (cutoff - bw) & data$GapToKnockoutQ2 <= (cutoff + bw), ]
     
-    # Crear la fórmula dinámica para el modelo
+    # Create the dynamic formula for the model
     formula <- as.formula(paste(outcome, "~ MadeItToQ3 + GapToKnockoutQ2 + GapToKnockoutQ2:MadeItToQ3 | Team:GP"))
     
-    # Ajustar el modelo
+    # Fit the model
     model <- felm(formula, data = data_filtered)
     
-    # Extraer coeficientes y errores estándar para MadeItToQ3 solo
+    # Extract coefficients and standard errors for MadeItToQ3 only
     if ("MadeItToQ3" %in% rownames(summary(model)$coefficients)) {
       estimate <- summary(model)$coefficients["MadeItToQ3", "Estimate"]
       std_error <- summary(model)$coefficients["MadeItToQ3", "Std. Error"]
       
-      # Calcular intervalos de confianza
+      # Compute confidence intervals
       ci_lower <- estimate - 1.96 * std_error
       ci_upper <- estimate + 1.96 * std_error
       
-      # Agregar resultados al dataframe
+      # Add results to the dataframe
       results <- rbind(results, data.frame(
         Outcome = outcome,
         Bandwidth = bw,
@@ -148,7 +93,7 @@ run_models_and_plotQ2 <- function(data, outcome, cutoff = 0, bandwidth_values = 
     }
   }
   
-  # Crear el gráfico de intervalos de confianza para las estimaciones de MadeItToQ3
+  # Create the confidence interval plot for the MadeItToQ3 estimates
   ggplot(results, aes(x = Bandwidth, y = Estimate)) +
     geom_point(color = "red") +
     geom_hline(yintercept = 0, color = "black") +
@@ -196,48 +141,47 @@ run_models_and_plotQ1(data, "TireHARD")
 run_models_and_plotQ2(data, "TireHARD")
 
 #PITLANE
-run_models_and_plotQ1(dataWithPitlane, "Pitlane")
-run_models_and_plotQ2(dataWithPitlane, "Pitlane")
+run_models_and_plotQ1(data, "Pitlane")
+run_models_and_plotQ2(data, "Pitlane")
 
 #DNFdriving
-run_models_and_plotQ1(dataWithPitlane, "DNFDriving")
-run_models_and_plotQ2(dataWithPitlane, "DNFDriving")
+run_models_and_plotQ1(data, "DNFDriving")
+run_models_and_plotQ2(data, "DNFDriving")
 
 #DNFMechanical
-run_models_and_plotQ1(dataWithPitlane, "DNFMechanical")
-run_models_and_plotQ2(dataWithPitlane, "DNFMechanical")
+run_models_and_plotQ1(data, "DNFMechanical")
+run_models_and_plotQ2(data, "DNFMechanical")
 
 
-
-#CUTOFFS
+# CUTOFFS
 cutoffQ1 <- function(data, outcome, cutoff_values = seq(-1, 1, by = 0.5)) {
-  results <- data.frame()  # Crear un dataframe para almacenar los resultados
+  results <- data.frame()  # Create a dataframe to store the results
   
   for (cutoff in cutoff_values) {
-    # Seleccionar el bandwidth óptimo usando rdbwselect
+    # Select the optimal bandwidth using rdbwselect
     bw <- rdbwselect(y = data[[outcome]], x = data$GapToKnockoutQ1, c = 0, bwselect = "mserd")
     bandwidth <- bw$bws[1]
     
-    # Filtrar los datos según el bandwidth y el cutoff actual
+    # Filter the data according to the bandwidth and current cutoff
     data_filtered <- data[data$GapToKnockoutQ1 >= (cutoff - bandwidth) & 
                             data$GapToKnockoutQ1 <= (cutoff + bandwidth), ]
     
-    # Crear la fórmula dinámica para el modelo
+    # Create the dynamic formula for the model
     formula <- as.formula(paste(outcome, "~ MadeItToQ2 + GapToKnockoutQ1 + GapToKnockoutQ1:MadeItToQ2 | Team:GP"))
     
-    # Ajustar el modelo
+    # Fit the model
     model <- felm(formula, data = data_filtered)
     
-    # Extraer coeficientes y errores estándar para MadeItToQ2 solo
+    # Extract coefficients and standard errors for MadeItToQ2 only
     if ("MadeItToQ2" %in% rownames(summary(model)$coefficients)) {
       estimate <- summary(model)$coefficients["MadeItToQ2", "Estimate"]
       std_error <- summary(model)$coefficients["MadeItToQ2", "Std. Error"]
       
-      # Calcular intervalos de confianza
+      # Calculate confidence intervals
       ci_lower <- estimate - 1.96 * std_error
       ci_upper <- estimate + 1.96 * std_error
       
-      # Agregar resultados al dataframe
+      # Add results to the dataframe
       results <- rbind(results, data.frame(
         Outcome = outcome,
         Cutoff = cutoff,
@@ -248,7 +192,7 @@ cutoffQ1 <- function(data, outcome, cutoff_values = seq(-1, 1, by = 0.5)) {
     }
   }
   
-  # Crear el gráfico de intervalos de confianza para las estimaciones de MadeItToQ2
+  # Create the confidence interval plot for the MadeItToQ2 estimates
   ggplot(results, aes(x = Cutoff, y = Estimate)) +
     geom_point(color = "red") +
     geom_hline(yintercept = 0, color = "black") +
@@ -258,33 +202,33 @@ cutoffQ1 <- function(data, outcome, cutoff_values = seq(-1, 1, by = 0.5)) {
 }
 
 cutoffQ2 <- function(data, outcome, cutoff_values = seq(-0.2, 0.2, by = 0.1)) {
-  results <- data.frame()  # Crear un dataframe para almacenar los resultados
+  results <- data.frame()  # Create a dataframe to store the results
   
   for (cutoff in cutoff_values) {
-    # Seleccionar el bandwidth óptimo usando rdbwselect
+    # Select the optimal bandwidth using rdbwselect
     bw <- rdbwselect(y = data[[outcome]], x = data$GapToKnockoutQ2, c = 0, bwselect = "mserd")
     bandwidth <- bw$bws[1]
     
-    # Filtrar los datos según el bandwidth y el cutoff actual
+    # Filter the data according to the bandwidth and current cutoff
     data_filtered <- data[data$GapToKnockoutQ2 >= (cutoff - bandwidth) & 
                             data$GapToKnockoutQ2 <= (cutoff + bandwidth), ]
     
-    # Crear la fórmula dinámica para el modelo
+    # Create the dynamic formula for the model
     formula <- as.formula(paste(outcome, "~ MadeItToQ3 + GapToKnockoutQ2 + GapToKnockoutQ2:MadeItToQ3 | Team:GP"))
     
-    # Ajustar el modelo
+    # Fit the model
     model <- felm(formula, data = data_filtered)
     
-    # Extraer coeficientes y errores estándar para MadeItToQ3 solo
+    # Extract coefficients and standard errors for MadeItToQ3 only
     if ("MadeItToQ3" %in% rownames(summary(model)$coefficients)) {
       estimate <- summary(model)$coefficients["MadeItToQ3", "Estimate"]
       std_error <- summary(model)$coefficients["MadeItToQ3", "Std. Error"]
       
-      # Calcular intervalos de confianza
+      # Calculate confidence intervals
       ci_lower <- estimate - 1.96 * std_error
       ci_upper <- estimate + 1.96 * std_error
       
-      # Agregar resultados al dataframe
+      # Add results to the dataframe
       results <- rbind(results, data.frame(
         Outcome = outcome,
         Cutoff = cutoff,
@@ -295,7 +239,7 @@ cutoffQ2 <- function(data, outcome, cutoff_values = seq(-0.2, 0.2, by = 0.1)) {
     }
   }
   
-  # Crear el gráfico de intervalos de confianza para las estimaciones de MadeItToQ3
+  # Create the confidence interval plot for the MadeItToQ3 estimates
   ggplot(results, aes(x = Cutoff, y = Estimate)) +
     geom_point(color = "red") +
     geom_hline(yintercept = 0, color = "black") +
@@ -303,25 +247,6 @@ cutoffQ2 <- function(data, outcome, cutoff_values = seq(-0.2, 0.2, by = 0.1)) {
     labs(x = "Cutoff (GapToKnockoutQ2)", y = "Estimate") +
     theme_bw()
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #GridPosition
 cutoffQ1(data, "GridPosition")
@@ -360,19 +285,18 @@ run_models_and_plotQ1(data, "TireHARD")
 run_models_and_plotQ2(data, "TireHARD")
 
 #PITLANE
-run_models_and_plotQ1(dataWithPitlane, "Pitlane")
-run_models_and_plotQ2(dataWithPitlane, "Pitlane")
+run_models_and_plotQ1(data, "Pitlane")
+run_models_and_plotQ2(data, "Pitlane")
 
 #DNFdriving
-run_models_and_plotQ1(dataWithPitlane, "DNFDriving")
-run_models_and_plotQ2(dataWithPitlane, "DNFDriving")
+run_models_and_plotQ1(data, "DNFDriving")
+run_models_and_plotQ2(data, "DNFDriving")
 
 #DNFMechanical
-run_models_and_plotQ1(dataWithPitlane, "DNFMechanical")
-run_models_and_plotQ2(dataWithPitlane, "DNFMechanical")
+run_models_and_plotQ1(data, "DNFMechanical")
+run_models_and_plotQ2(data, "DNFMechanical")
 
-
-
+#RD Robust
 analysis_cutoff_rdrobust <- function(data, running_var, dependent_var, cutoffs = seq(-1, 1, by = 0.5), grado_pol = 1) {
   
   # Create a list to store results
@@ -386,7 +310,6 @@ analysis_cutoff_rdrobust <- function(data, running_var, dependent_var, cutoffs =
       next  # Skip this cutoff and move to the next
     }
     
-    # Perform analysis with `rdrobust` for the current cutoff
     rd_result <- tryCatch(
       rdrobust(y = data[[dependent_var]], x = data[[running_var]], c = cutoff, p = grado_pol),
       error = function(e) {
@@ -423,10 +346,6 @@ analysis_cutoff_rdrobust <- function(data, running_var, dependent_var, cutoffs =
   # Combine all results into a single data frame
   results_df <- do.call(rbind, results)
   
-  # Print the data frame to the console
-  print(results_df)
-  
-  # Generate a plot of the results with custom styling
   ggplot(results_df, aes(x = Cutoff, y = RD_Estimator)) +
     geom_point(color = "red", size = 2) +  # Red points for estimates
     geom_errorbar(aes(ymin = CI_Lower, ymax = CI_Upper), width = 0.2, color = "steelblue") +  # Vertical error bars in blue
@@ -476,15 +395,15 @@ analysis_cutoff_rdrobust(data, "GapToKnockoutQ1", "TireHARD")
 analysis_cutoff_rdrobust(data, "GapToKnockoutQ2", "TireHARD")
 
 # PITLANE
-analysis_cutoff_rdrobust(dataWithPitlane, "GapToKnockoutQ1", "Pitlane")
-analysis_cutoff_rdrobust(dataWithPitlane, "GapToKnockoutQ2", "Pitlane")
+analysis_cutoff_rdrobust(data, "GapToKnockoutQ1", "Pitlane")
+analysis_cutoff_rdrobust(data, "GapToKnockoutQ2", "Pitlane")
 
 # DNF driving
-analysis_cutoff_rdrobust(dataWithPitlane, "GapToKnockoutQ1", "DNFDriving")
-analysis_cutoff_rdrobust(dataWithPitlane, "GapToKnockoutQ2", "DNFDriving")
+analysis_cutoff_rdrobust(data, "GapToKnockoutQ1", "DNFDriving")
+analysis_cutoff_rdrobust(data, "GapToKnockoutQ2", "DNFDriving")
 
 # DNF Mechanical
-analysis_cutoff_rdrobust(dataWithPitlane, "GapToKnockoutQ1", "DNFMechanical")
-analysis_cutoff_rdrobust(dataWithPitlane, "GapToKnockoutQ2", "DNFMechanical")
+analysis_cutoff_rdrobust(data, "GapToKnockoutQ1", "DNFMechanical")
+analysis_cutoff_rdrobust(data, "GapToKnockoutQ2", "DNFMechanical")
 
 

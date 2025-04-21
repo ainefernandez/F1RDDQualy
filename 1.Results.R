@@ -1,3 +1,11 @@
+# 1. Results
+# This R script calculates all the RD estimates for the outcome and covariate variables (for balance checks).
+# The estimation equation is applied for both Q1 and Q2, and the corresponding RD plots are generated for graphical analysis.
+# Finally, a placebo RD analysis is conducted for the covariates.
+
+
+
+
 library(dplyr)
 library(tidyverse)
 library(stargazer)
