@@ -1,10 +1,10 @@
-# 🏁 Does Qualifying Really Matter?  The Causal Impact of Advancing to Q2 and Q3 on Formula 1 Race Outcomes  🎯
+# 🏁 Does Qualifying Really Matter? The Causal Impact of Advancing to Q2 and Q3 on Formula 1 Race Outcomes 🎯
 
 Hi there! 👋
 
-Welcome to my repo — Bringing econometrics into the world of Formula 1! 🚦🏎️  
+Welcome to my repo — bringing econometrics into the world of Formula 1! 🚦🏎️  
 This project uses a Regression Discontinuity Design (RDD) to explore a question as old as F1 itself:  
-Does qualifying performance on Saturday *really* impact a driver's race on Sunday?
+Does qualifying performance on Saturday really impact a driver's race on Sunday?
 
 ## 📁 Repository Structure
 
@@ -14,7 +14,7 @@ Does qualifying performance on Saturday *really* impact a driver's race on Sunda
 - [`2.RobustnessAnalysis.R`](2.RobustnessAnalysis.R): Performs robustness checks by varying bandwidths and cutoffs.
 
 Thanks for checking out the project!  
-If you’re into F1 and econometrics, you’re in the right place! 🔍🏎️
+If you’re into F1 and econometrics, you’re in the right place. 🧠📈🏎️
 
 
 
