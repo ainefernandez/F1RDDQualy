@@ -8,6 +8,18 @@ Does qualifying performance on Saturday really impact a driver's race on Sunday?
 
 ## 📁 Repository Structure
 
+'''
+F1RDDQUALY/
+  ├── README.md  # Project overview 📖
+  ├── 
+  ├── environment.yml # Conda environment with all required libraries (pinned versions) 🐍
+  ├── code/
+  │   └── datamining.py #  Main script that scrapes superhero data and processes it 🕵️‍♂️ 
+  └── data/
+      └── superheroes.csv  # Final dataset with the collected superhero data as a CSV file 🦸‍♂️
+
+
+
 - [`FinalDataSet.csv`](FinalDataSet.csv): The full dataset used for the analysis.
 - [`0.DataExtraction.ipynb`](0.DataExtraction.ipynb): Jupyter notebook that collects and cleans the raw data using FastF1.
 - [`1.Results.R`](1.Results.R): Runs the main RD estimates using the estimation equation for Q1 and Q2 transitions.
