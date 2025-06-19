@@ -17,7 +17,7 @@ F1RDDQUALY/
   │   └── datamining.py #  Main script that scrapes superhero data and processes it 🕵️‍♂️ 
   └── data/
       └── superheroes.csv  # Final dataset with the collected superhero data as a CSV file 🦸‍♂️
-
+'''
 
 
 - [`FinalDataSet.csv`](FinalDataSet.csv): The full dataset used for the analysis.
