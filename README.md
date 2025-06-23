@@ -3,10 +3,10 @@
 Hi there! 👋
 
 Welcome to my repo — bringing econometrics into the world of Formula 1! 🚦🏎️  
+This README will give you an overview of the project — including why I did it, how I approached the analysis, the data I used, and what I discovered. 
+
 This project uses a Regression Discontinuity Design (RDD) to explore a question as old as F1 itself:  
 Does qualifying performance on Saturday really impact a driver's race on Sunday?
-
-This ReadMe will give you an overview of the project detailing the motivation, data, empirical strategy and results. 
 
 Thanks for checking out the project!
 If you’re into F1 and econometrics, you’re in the right place. 🧠📈🏎️
