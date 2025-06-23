@@ -6,6 +6,11 @@ Welcome to my repo — bringing econometrics into the world of Formula 1! 🚦�
 This project uses a Regression Discontinuity Design (RDD) to explore a question as old as F1 itself:  
 Does qualifying performance on Saturday really impact a driver's race on Sunday?
 
+This ReadMe will give you an overview of the project detailing the motivation, data, empirical strategy and results. 
+
+Thanks for checking out the project!
+If you’re into F1 and econometrics, you’re in the right place. 🧠📈🏎️
+
 ## 📁 Repo Structure 
 
 ```
@@ -16,8 +21,7 @@ F1RDDQualy/
 └── 2.RobustnessAnalysis.R  # Performs robustness checks by varying bandwidths and cutoffs
 ```
 
-Thanks for checking out the project!  
-If you’re into F1 and econometrics, you’re in the right place. 🧠📈🏎️
+
 
 
 
