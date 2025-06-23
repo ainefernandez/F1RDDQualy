@@ -2,7 +2,7 @@
 
 Hi there! 👋
 
-Welcome to my repo — bringing econometrics into the world of Formula 1! 🚦🏎️  
+Welcome to my repo, bringing econometrics into the world of Formula 1! 🚦🏎️  
 This README will give you an overview of the project — including why I did it, how I approached the analysis, the data I used, and what I discovered. 
 
 This project uses a Regression Discontinuity Design (RDD) to explore a question as old as F1 itself:  
@@ -20,6 +20,8 @@ F1RDDQualy/
 ├── 1.Results.R              # Runs the main RD estimates using the estimation equation for Q1 and Q2 transitions
 └── 2.RobustnessAnalysis.R  # Performs robustness checks by varying bandwidths and cutoffs
 ```
+
+## 💡Motivation 
 
 
 
