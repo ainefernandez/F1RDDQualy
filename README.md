@@ -41,6 +41,8 @@ That's the question I set out to explore in this project. How much does qualifyi
 
 ## 🏎️ F1 Qualifying Format
 
+> **📌 Note on replicating with newer data:** This analysis is based on data from **2019 to 2024** (2024 through the Italian GP at Monza), when the grid had 20 drivers. Starting in 2026, the grid expanded to 22 drivers. If you want to extend this analysis with 2026+ data, the knockout thresholds shift accordingly: Q1 and Q2 each eliminate 6 drivers instead of 5 (22 → 16 → 10), while the Q3 top-10 shootout stays exactly the same. The running variable definition and RDD logic in this repo carry over unchanged, you'd just need to recompute `GapToKnockout` against the new 16th-fastest (Q1) and 10th-fastest (Q2) times.
+
 F1 qualifying is a knockout format split into three sessions:
 
 | Session | Cars | Time | What happens |
@@ -100,7 +102,7 @@ To test how reliable the results are, I run two robustness checks:
 
 Covariates are chosen because they *shouldn't* jump at the cutoff, they reflect who the driver is and how their weekend/season has gone so far, not what happened in that specific qualifying session. Confirming they're balanced around the cutoff is what makes the design credible.
 
-> **📌 Note on replicating with newer data:** Starting in 2026, the grid expanded to 22 drivers. If you want to extend this analysis with 2026+ data, the knockout thresholds shift accordingly: Q1 and Q2 each eliminate 6 drivers instead of 5 (22 → 16 → 10), while the Q3 top-10 shootout stays exactly the same. The running variable definition and RDD logic in this repo carry over unchanged, you'd just need to recompute `GapToKnockout` against the new 16th-fastest (Q1) and 10th-fastest (Q2) times.
+
 
 ## 📈 Results
 
