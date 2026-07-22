@@ -115,12 +115,12 @@ Covariates are chosen because they *shouldn't* jump at the cutoff, they reflect 
 | Grid Position | **−3.63 positions**\*\*\* | **−1.86 positions**\*\*\* |
 | Race Position | **−2.02 positions**\*\*\* | **−0.94 positions**\* |
 | Points | **+1.04 points**\*\* | not significant |
-| Probability of DNF | **−9.6 pp**\*\*\* | not significant |
-| Probability of Mechanical DNF | **−5.0 pp**\*\* | not significant |
+| Probability of DNF | **reduces by 0.096**\*\*\* | not significant |
+| Probability of Mechanical DNF | **reduces by 0.050**\*\* | not significant |
 | Probability of Driving DNF | not significant | not significant |
 | Alternative Tyre Strategy | not significant | not significant |
 | Number of Pit Stops | not significant | not significant |
-| Probability of Pitlane Start | **−5.6 pp**\*\*\* | not significant |
+| Probability of Pitlane Start | **reduces by 0.056**\*\*\* | not significant |
 
 *(\*\*\* p<0.01, \*\* p<0.05, \* p<0.10 — negative = better/lower position or lower probability)*
 
