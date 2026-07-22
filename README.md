@@ -49,7 +49,8 @@ F1 qualifying is a knockout format split into three sessions:
 | **Q2** | 15 | 15 min | 5 slowest drivers eliminated → positions 11th–15th set |
 | **Q3** | 10 | 12 min | Fastest driver takes pole → positions 1st–10th set |
 
-Each session resets — the order from Q1 doesn't carry into Q2, and so on. To advance, a driver simply needs to beat the knockout threshold: the 15th-fastest time in Q1, or the 10th-fastest time in Q2. That's what makes this setting so useful for causal inference — it's a hard cutoff, not a fuzzy one.
+Each session resets,  the order from Q1 doesn't carry into Q2, and so on. To advance, a driver simply needs to beat the knockout threshold: the 15th-fastest time in Q1, or the 10th-fastest time in Q2. That's what makes this setting so useful for causal inference, it's a hard cutoff, not a fuzzy one.
+
 
 I use this cutoff to build two treatment variables:
 - **MadeItToQ2** — did the driver advance out of Q1?
@@ -98,6 +99,8 @@ To test how reliable the results are, I run two robustness checks:
 | **Outcomes** | `GridPosition`, `RacePosition`, `Points`, `DNF` (overall / driving / mechanical), `StartingTyre`, `NumberOfPitStops`, `AlternativeStrategy`, `Pitlane` |
 
 Covariates are chosen because they *shouldn't* jump at the cutoff, they reflect who the driver is and how their weekend/season has gone so far, not what happened in that specific qualifying session. Confirming they're balanced around the cutoff is what makes the design credible.
+
+> **📌 Note on replicating with newer data:** Starting in 2026, the grid expanded to 22 drivers. If you want to extend this analysis with 2026+ data, the knockout thresholds shift accordingly: Q1 and Q2 each eliminate 6 drivers instead of 5 (22 → 16 → 10), while the Q3 top-10 shootout stays exactly the same. The running variable definition and RDD logic in this repo carry over unchanged, you'd just need to recompute `GapToKnockout` against the new 16th-fastest (Q1) and 10th-fastest (Q2) times.
 
 ## 📈 Results
 
